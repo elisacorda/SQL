@@ -27,7 +27,9 @@ VALUES
     (14, 'Cutlery Set', 'Kitchen Supplies', 34.50, 40, 4.4),
     (15, 'Cozy Throw Blanket', 'Furnishings', 24.99, 100, 4.2);
 
--- For this project, I used SQL to query the Superstore database to get statistics about items sold at the store.
+-- For this project I worked on a Superstore database where I used SQL to retrieve and analyze data. 
+-- This included querying information on item prices, such as average, maximum, and minimum prices, total number of items purchased, and the sum of prices, with the results grouped by category. 
+-- Additionally, I queried statistics on stock levels and item ratings.
 
 -- Order the items by price
 SELECT *
