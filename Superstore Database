@@ -1,4 +1,4 @@
--- This project utilizes the following Superstore data: 
+# This project utilizes the following Superstore data: 
 
 CREATE TABLE superstore (
     item_id INTEGER PRIMARY KEY,
@@ -27,9 +27,8 @@ VALUES
     (14, 'Cutlery Set', 'Kitchen Supplies', 34.50, 40, 4.4),
     (15, 'Cozy Throw Blanket', 'Furnishings', 24.99, 100, 4.2);
 
--- For this project I worked on a Superstore database where I used SQL to retrieve and analyze data. 
--- This included querying information on item prices, such as average, maximum, and minimum prices, total number of items purchased, and the sum of prices, with the results grouped by category. 
--- Additionally, I queried statistics on stock levels and item ratings.
+# For this project I worked on a Superstore database where I used SQL to retrieve and analyze data. This included querying information on item prices, such as average, maximum, and minimum prices, total number of items purchased, and the sum of prices, with the results grouped by category. 
+# Additionally, I queried statistics on stock levels and item ratings.
 
 -- Order the items by price
 SELECT *
@@ -38,7 +37,7 @@ ORDER BY price DESC
 ;
 
 -- General statistics
-SELECT COUNT(price), SUM(price), AVG(price), MIN(price), MAX(price)
+SELECT COUNT(price), SUM(price), ROUND(AVG(price),2) as average_price, MIN(price), MAX(price)
 FROM superstore
 ;
 
@@ -48,12 +47,6 @@ FROM superstore
 ;
 
 -- Statistics about the price for items in "Kitchen Supplies"
-SELECT category, item_name, price
-FROM superstore
-WHERE category='Kitchen Supplies'
-ORDER BY price DESC
-;
-
 SELECT category, COUNT(price), SUM(price), AVG(price), MIN(price), MAX(price)
 FROM superstore
 WHERE category='Kitchen Supplies'
@@ -71,7 +64,7 @@ FROM superstore
 ;
 
 -- What are the items with fewer pieces in stock?
-SELECT MIN(stock_quantity)
+SELECT item_name, MIN(stock_quantity)
 FROM superstore
 ;
 
