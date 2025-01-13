@@ -64,11 +64,8 @@ FROM superstore
 ;
 
 #7. What are the items with fewer pieces in stock?
-SELECT item_name, MIN(stock_quantity)
-FROM superstore
-;
-
 SELECT item_name, stock_quantity
 FROM superstore
-WHERE stock_quantity=20
+WHERE stock_quantity = (SELECT MIN(stock_quantity)
+FROM superstore)
 ;
