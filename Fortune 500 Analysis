@@ -60,7 +60,7 @@ VALUES
 
 # Analysis:
 
--- Categorize companies into specific ranges based on their revenue.
+#1. Categorize companies into specific ranges based on their revenue.
 SELECT company_name, industry, CASE WHEN revenue>=400 THEN '450+'
 WHEN revenue>=250 THEN '250+'
 WHEN revenue>=100 THEN '100+'
@@ -70,7 +70,7 @@ WHERE healthcare_benefits=1
 ORDER BY revenue DESC
 ;
 
--- Compare the total and average revenues for each industry, but only include industries where the total revenue is at least $1000 billion. The results are sorted in descending order based on total revenue.
+#2. Compare the total and average revenues for each industry, but only include industries where the total revenue is at least $1000 billion. The results are sorted in descending order based on total revenue.
 SELECT industry, ROUND(SUM(revenue), 1) AS total_revenue, ROUND(AVG(revenue),1) AS avg_revenue
 FROM fortune_companies
 GROUP BY industry
@@ -78,28 +78,28 @@ HAVING total_revenue>=1000
 ORDER BY total_revenue DESC
 ;
 
--- Compare the total number of employees, the average employee tenure, and the average revenue for each industry. The results are sorted in descending order based on the average employee tenure.
+#3. Compare the total number of employees, the average employee tenure, and the average revenue for each industry. The results are sorted in descending order based on the average employee tenure.
 SELECT industry, COUNT(*) AS number_of_companies, SUM(employees) AS total_employees, ROUND(AVG(avg_employee_tenure),1) AS industry_avg_tenure, ROUND(AVG(revenue),1) AS avg_revenue
 FROM fortune_companies
 GROUP BY industry
 ORDER BY industry_avg_tenure DESC
 ;
 
--- Which companies, in the technology industry, have healthcare benefits and at least 15 days off or more than 9 weeks of maternity leave?
+#4. Which companies, in the technology industry, have healthcare benefits and at least 15 days off or more than 9 weeks of maternity leave?
 SELECT company_name AS technology_companies, paid_time_off_days, maternity_leave_weeks
 FROM fortune_companies
 WHERE industry='Technology' AND healthcare_benefits=1 AND (paid_time_off_days>=15 OR maternity_leave_weeks>=10)
 ORDER BY paid_time_off_days DESC
 ;
 
--- Which healtcare companies offer healthcare benefits or more than 15 days off?
+#5. Which healtcare companies offer healthcare benefits or more than 15 days off?
 SELECT company_name AS healthcare_companies, healthcare_benefits, paid_time_off_days, maternity_leave_weeks, avg_employee_tenure
 FROM fortune_companies
 WHERE industry='Healthcare' AND (healthcare_benefits=1 OR paid_time_off_days>15)
 ORDER BY maternity_leave_weeks DESC
 ;
 
--- Which company in the Retail industry has the least revenue, and what's their revenue?
+#6. Which company in the Retail industry has the least revenue, and what's their revenue?
 SELECT company_name, MIN(revenue)
 FROM fortune_companies
 WHERE industry='Retail'
