@@ -1,0 +1,66 @@
+#In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. 
+
+-- How many orders were placed in January?
+SELECT COUNT(*)
+FROM BIT_DB.JanSales
+WHERE length(orderID)=6 AND orderID <> 'Order ID'
+;
+
+-- How many of those orders were for an iPhone?
+SELECT COUNT(*)
+FROM BIT_DB.JanSales
+WHERE Product='iPhone' AND length(orderID)=6
+;
+
+-- Select the customer account numbers for all the orders that were placed in February.
+SELECT DISTINCT cust.acctnum
+FROM BIT_DB.customers cust
+INNER JOIN BIT_DB.FebSales feb
+ON cust.order_id=feb.orderID
+WHERE length(feb.orderID)=6
+;
+
+--Which product was the cheapest one sold in January, and what was the price?
+-- 1
+SELECT DISTINCT Product, price
+FROM BIT_DB.JanSales
+WHERE price=(SELECT MIN(price) FROM BIT_DB.JanSales)
+;
+
+-- 2
+SELECT DISTINCT Product, price
+FROM BIT_DB.JanSales
+ORDER BY price ASC
+LIMIT 1
+;
+
+--3
+SELECT DISTINCT Product, MIN(price) price
+FROM BIT_DB.JanSales
+GROUP BY Product
+ORDER BY price ASC
+LIMIT 1
+;
+
+-- What is the total revenue for each product sold in January?
+SELECT Product, ROUND(SUM(Quantity)*price,1) revenue
+FROM BIT_DB.JanSales
+WHERE length(orderID)=6
+GROUP BY Product
+ORDER BY Product
+;
+
+-- Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+SELECT Product, SUM(Quantity), SUM(Quantity)*price revenue
+FROM BIT_DB.FebSales
+WHERE location='548 Lincoln St, Seattle, WA 98101' AND length(orderID)=6
+GROUP BY Product
+;
+
+-- How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
+SELECT COUNT(DISTINCT acctnum), AVG(Quantity*price)
+FROM BIT_DB.FebSales feb 
+LEFT JOIN BIT_DB.customers cust
+ON cust.order_id=feb.orderID
+WHERE Quantity>2 AND length(orderID)=6
+;
