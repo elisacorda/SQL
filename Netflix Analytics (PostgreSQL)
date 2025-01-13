@@ -62,28 +62,26 @@ VALUES
 
 # The following SQL was written to answer specific questions about the content on Netflix:
 
--- How many movie titles are there in the database? (movies only, not tv shows)
+#1. How many movie titles are there in the database? (movies only, not tv shows)
 SELECT COUNT(*)
 FROM "netflix_titles_info"
 WHERE type='Movie'
 ;
 
--- List the directors for all the movies and TV shows and order the list by type.
-SELECT people.director
-,titles.title
-,titles.type
+#2. List the directors for all the movies and TV shows and order the list by type.
+SELECT people.director, titles.title, titles.type
 FROM "netflix_people" people
 LEFT JOIN "netflix_titles_info" titles
 ON people.show_id=titles.show_id
 ORDER BY titles.type
 ;
 
--- When was the most recent batch of tv shows and/or movies added to the database?
+#3. When was the most recent batch of tv shows and/or movies added to the database?
 SELECT MAX(date(date_added))
 FROM "netflix_titles_info"
 ;
 
--- List all the tv shows in alphabetical order showing the relative cast.
+#4. List all the tv shows in alphabetical order showing the relative cast.
 SELECT titles.title, people.cast
 FROM "netflix_titles_info" titles
 LEFT JOIN "netflix_people" people
@@ -92,7 +90,7 @@ WHERE type='TV Show'
 ORDER BY title ASC
 ;
 
--- Who was the Director for the movie The Starling?
+#5. Who was the Director for the movie The Starling?
 SELECT director
 FROM "netflix_titles_info" titles
 LEFT JOIN "netflix_people" people
@@ -100,7 +98,7 @@ ON titles.show_id=people.show_id
 WHERE title='The Starling'
 ;
 
--- What is the oldest movie in the database and what year was it made?
+#6. What is the oldest movie in the database and what year was it made?
 SELECT title, release_year
 FROM "netflix_titles_info"
 WHERE type='Movie'
@@ -108,14 +106,14 @@ ORDER BY release_year ASC
 LIMIT 1
 ;
 
--- Check if there is more than une movie released in 1993.
+#7. Check if there is more than une movie released in 1993.
 SELECT title, release_year
 FROM "netflix_titles_info"
 WHERE type='Movie' AND release_year<=(SELECT MIN(release_year)
 FROM "netflix_titles_info" WHERE type='Movie')
 ;
 
--- Which is the cast of the TV show Jaguar?
+#8. Which is the cast of the TV show Jaguar?
 SELECT people.cast
 FROM "netflix_people" people
 LEFT JOIN "netflix_titles_info" titles
