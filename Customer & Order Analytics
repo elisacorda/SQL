@@ -1,13 +1,13 @@
 # In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. 
 
 #1. How many orders were placed in January?
-SELECT COUNT(*)
+SELECT COUNT(DISTINCT orderID)
 FROM BIT_DB.JanSales
 WHERE length(orderID)=6 AND orderID <> 'Order ID'
 ;
 
 #2. How many of those orders were for an iPhone?
-SELECT COUNT(*)
+SELECT Product, COUNT(DISTINCT orderID)
 FROM BIT_DB.JanSales
 WHERE Product='iPhone' AND length(orderID)=6
 ;
