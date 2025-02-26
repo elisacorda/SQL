@@ -1,39 +1,35 @@
 # For this project I downloaded a digital media store database and performed analytics on it using SQL.
 
 #1. Which is the best-selling genre and how many tracks of that genre have been sold?
-SELECT genres.Name, COUNT(items.TrackId) sold_tracks_num
-FROM chinook.tracks tracks
+SELECT genres.Name, SUM(items.Quantity) sold_tracks
+FROM chinook.tracks
 INNER JOIN chinook.invoice_items items
 ON tracks.TrackId=items.TrackId
 INNER JOIN chinook.genres
 ON tracks.GenreId=genres.GenreId
 GROUP BY tracks.GenreId
-ORDER BY sold_tracks_num DESC
+ORDER BY sold_tracks DESC
 LIMIT 1
 ;
 
 #2. Which tracks sold the most in 2011?
-SELECT tracks.Name, SUM(invoice_items.UnitPrice*invoice_items.Quantity) as total_sales
-FROM chinook.invoice_items
-LEFT JOIN chinook.tracks
-ON invoice_items.TrackId=tracks.TrackId
-LEFT JOIN chinook.invoices
-ON invoice_items.InvoiceId=invoices.InvoiceId
-WHERE invoices.InvoiceDate like '2011%'
-GROUP BY tracks.Name
-HAVING total_sales=
-(SELECT MAX(SUM(invoice_items.UnitPrice*invoice_items.Quantity)) OVER ()
-FROM chinook.invoice_items
-LEFT JOIN chinook.tracks
-ON invoice_items.TrackId=tracks.TrackId
-LEFT JOIN chinook.invoices
-ON invoice_items.InvoiceId=invoices.InvoiceId
-WHERE invoices.InvoiceDate like '2011%'
+WITH track_sales (Name, tot_sales) AS (
+SELECT tracks.Name, SUM(Quantity)
+FROM invoice_items
+LEFT JOIN tracks
+ON tracks.TrackId=invoice_items.TrackId
+LEFT JOIN invoices
+ON invoices.InvoiceId=invoice_items.InvoiceId
+WHERE invoices.InvoiceDate LIKE '2011%'
 GROUP BY tracks.Name
 )
+SELECT Name, tot_sales
+FROM track_sales
+WHERE tot_sales = (SELECT MAX(tot_sales)
+FROM track_sales)
 ;
 
-#3. Show Customers (their full names, customer ID, and country) who are not in the US. (Hint: != or <> can be used to say "is not equal to").
+#3. Show Customers (their full names, customer ID, and country) who are not in the US.
 SELECT FirstName, LastName, CustomerId, Country
 FROM chinook.customers
 WHERE Country<>'USA'
