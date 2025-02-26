@@ -35,7 +35,7 @@ LIMIT 1
 ;
 
 #5. What is the total revenue for each product sold in January?
-SELECT Product, ROUND(SUM(Quantity)*price,1) revenue
+SELECT Product, ROUND(SUM(Quantity*price),1) revenue
 FROM BIT_DB.JanSales
 WHERE length(orderID)=6
 GROUP BY Product
@@ -89,7 +89,7 @@ GROUP BY cust.acctnum
 ;
 
 #12. What was the average amount spent per account in February?
-SELECT SUM(Quantity*price)/COUNT(DISTINCT cust.acctnum) average_spent
+SELECT ROUND(SUM(Quantity*price)/COUNT(DISTINCT cust.acctnum), 1) average_spent
 FROM BIT_DB.FebSales feb
 LEFT JOIN BIT_DB.customers cust
 ON feb.orderID=cust.order_id
@@ -105,7 +105,7 @@ WHERE length(orderID)=6
 ;
 
 #14. Which product brought in the most revenue in January and how much revenue did it bring in total?
-SELECT Product, SUM(Quantity)*price revenue
+SELECT Product, SUM(Quantity*price) revenue
 FROM BIT_DB.JanSales
 WHERE length(orderID)=6
 GROUP BY Product
