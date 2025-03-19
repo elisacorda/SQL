@@ -1,0 +1,45 @@
+-- 1. List each pair of parent and child living at the same address.
+SELECT Parents.parent, Parents.child
+FROM Parents
+JOIN Person pe1 ON pe1.name=Parents.parent
+JOIN Person pe2 on pe2.name=Parents.child
+WHERE pe1.addr=pe2.addr
+;
+
+-- 2. List each pair of grandparent and child.
+SELECT pa1.parent grandparent, pa2.child child
+FROM Parents pa1
+JOIN Parents pa2 ON pa1.child=pa2.parent
+;
+
+-- 3. List each pair of grandparent and child living at the same address.
+SELECT pa1.parent grandparent , pa2.child child
+FROM Parents pa1
+JOIN Parents pa2 ON pa1.child=pa2.parent
+JOIN Person pe1 ON pe1.name=pa1.parent
+JOIN Person pe2 ON pe2.name=pa2.child
+WHERE pe1.addr=pe2.addr
+;
+
+/* 4. Create the table Ancestors(predecessor, successor). Optionally, make predecessor and
+successor foreign keys referencing Person(name).*/
+CREATE TABLE Ancestors (
+predecessor TEXT,
+successor TEXT,
+FOREIGN KEY (predecessor) REFERENCES Person(name),
+FOREIGN KEY (successor) REFERENCES Person(name)
+)
+;
+
+-- 5. For each pair (p, s) such that p is an ancestor of s, insert the pair (p, s) in Ancestors.
+INSERT INTO Ancestors (predecessor, successor)
+WITH RECURSIVE temp_ancestors AS (
+SELECT parent as p, child as s
+FROM Parents
+UNION ALL
+SELECT pa.parent, anc.s
+FROM temp_ancestors anc
+JOIN Parents pa ON anc.p=pa.child)
+SELECT * 
+FROM temp_ancestors
+;
