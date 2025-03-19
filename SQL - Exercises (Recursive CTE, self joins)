@@ -1,3 +1,5 @@
+**Queries on a database called Parent, initially containing two tables: Parents and Person.**
+
 -- 1. List each pair of parent and child living at the same address.
 SELECT Parents.parent, Parents.child
 FROM Parents
@@ -42,4 +44,71 @@ FROM temp_ancestors anc
 JOIN Parents pa ON anc.p=pa.child)
 SELECT * 
 FROM temp_ancestors
+;
+
+
+
+
+
+**Queries on a database called Drinkers, initially containing five tables: Bars, Beers, Drinkers, Likes, Sells.**
+
+-- 1. List all pairs of drinkers who live at the same address.
+SELECT d1.name, d2.name
+FROM Drinkers d1
+JOIN Drinkers d2 ON d1.addr=d2.addr
+WHERE d1.name<>d2.name
+;
+
+-- 2. List all bars that sell Corona AND Bud
+SELECT s2.bar
+FROM Sells s1, Sells s2
+WHERE s1.bar=s2.bar AND s1.beer='Bud' AND s2.beer='Corona'
+;
+
+-- 3. Create the table DrinkersBackup(name, addr) and fill it with the same data from Drinkers
+CREATE TABLE DrinkersBackup (
+  name VARCHAR(20), 
+  addr VARCHAR(50),
+  PRIMARY KEY (name)
+  );
+  
+INSERT INTO DrinkersBackup (name, addr)
+SELECT name, addr
+FROM Drinkers
+;
+
+-- 4. Create the table Frequents(drinker, bar).
+CREATE TABLE Frequents (
+  drinker VARCHAR(20),
+  bar VARCHAR(20)
+  );
+  
+-- 5. List all drinkers and bars with the same address
+SELECT d.name, b.name
+FROM Drinkers d 
+JOIN Bars b
+ON d.addr = b.addr
+;
+
+/* 6. List all pairs (drinker, bar) such that
+• the drinker and the bar have the same address and
+• the bar sells beers that the drinker likes.*/
+SELECT DISTINCT d.name drinker, b.name bar
+FROM Drinkers d 
+JOIN Bars b ON d.addr = b.addr
+JOIN Likes l ON d.name=l.drinker
+JOIN Sells s ON s.bar=b.name
+WHERE s.beer=l.beer
+;
+
+-- 7. Insert the results of the previous query in the Frequents table.
+INSERT INTO Frequents (
+  drinker,
+  bar)
+SELECT DISTINCT d.name drinker, b.name bar
+FROM Drinkers d 
+JOIN Bars b ON d.addr = b.addr
+JOIN Likes l ON d.name=l.drinker
+JOIN Sells s ON s.bar=b.name
+WHERE s.beer=l.beer
 ;
