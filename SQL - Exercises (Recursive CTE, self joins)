@@ -1,4 +1,4 @@
-**Queries on a database called Parent, initially containing two tables: Parents and Person.**
+Queries on a database called Parent, initially containing two tables: Parents and Person.
 
 -- 1. List each pair of parent and child living at the same address.
 SELECT Parents.parent, Parents.child
@@ -50,7 +50,7 @@ FROM temp_ancestors
 
 
 
-**Queries on a database called Drinkers, initially containing five tables: Bars, Beers, Drinkers, Likes, Sells.**
+Queries on a database called Drinkers, initially containing five tables: Bars, Beers, Drinkers, Likes, Sells.
 
 -- 1. List all pairs of drinkers who live at the same address.
 SELECT d1.name, d2.name
