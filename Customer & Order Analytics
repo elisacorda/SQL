@@ -21,10 +21,8 @@ WHERE length(feb.orderID)=6
 ;
 
 #4. Which product was the cheapest one sold in January, and what was the price?
-
-SELECT DISTINCT Product, price
+SELECT Product, MIN(price)
 FROM BIT_DB.JanSales
-WHERE price=(SELECT MIN(price) FROM BIT_DB.JanSales)
 ;
 
 #or
