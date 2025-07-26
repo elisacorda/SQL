@@ -20,9 +20,9 @@ ON cust.order_id=feb.orderID
 WHERE length(feb.orderID)=6
 ;
 
-#4. Which product was the cheapest one sold in January, and what was the price?
+#4. Which product was the cheapest one sold in May, and what was the price?
 SELECT Product, MIN(price)
-FROM BIT_DB.JanSales
+FROM BIT_DB.MaySales
 ;
 
 #or
