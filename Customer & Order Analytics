@@ -32,32 +32,32 @@ ORDER BY price ASC
 LIMIT 1
 ;
 
-#5. What is the total revenue for each product sold in January?
+#5. What is the total revenue for each product sold in March?
 SELECT Product, ROUND(SUM(Quantity*price),1) revenue
-FROM BIT_DB.JanSales
+FROM BIT_DB.MarSales
 WHERE length(orderID)=6
 GROUP BY Product
 ORDER BY revenue
 ;
 
-#6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+#6. Which products were sold in May at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
 SELECT Product, SUM(Quantity) tot_quantity, SUM(Quantity*price) revenue
-FROM BIT_DB.FebSales
+FROM BIT_DB.MaySales
 WHERE location='548 Lincoln St, Seattle, WA 98101' AND length(orderID)=6
 GROUP BY Product
 ;
 
-#7. How many customers ordered more than 2 products at a time in February, and what was the average amount spent by those customers?
+#7. How many customers ordered more than 2 products at a time in April, and what was the average amount spent by those customers?
 SELECT COUNT(DISTINCT acctnum), AVG(Quantity*price)
-FROM BIT_DB.FebSales feb 
+FROM BIT_DB.AprSales apr 
 LEFT JOIN BIT_DB.customers cust
-ON cust.order_id=feb.orderID
+ON cust.order_id=apr.orderID
 WHERE Quantity>2 AND length(orderID)=6
 ;
 
-#8. List all the products sold in Los Angeles in February, and include how many of each were sold.
+#8. List all the products sold in Los Angeles in May, and include how many of each were sold.
 SELECT Product, SUM(Quantity)
-FROM BIT_DB.FebSales
+FROM BIT_DB.MaySales
 WHERE length(orderID)=6 AND location like '%Los Angeles%'
 GROUP BY Product
 ;
@@ -77,9 +77,9 @@ WHERE Product like '%Headphones%'
 GROUP BY Product
 ;
 
-#11. What was the average amount spent for each account in February?
+#11. What was the average amount spent for each account in April?
 SELECT cust.acctnum, AVG(Quantity*price) avg_spent
-FROM BIT_DB.FebSales feb
+FROM BIT_DB.AprSales apr
 LEFT JOIN BIT_DB.customers cust
 ON feb.orderID=cust.order_id
 WHERE length(orderID)=6
@@ -94,9 +94,9 @@ ON feb.orderID=cust.order_id
 WHERE length(orderID)=6
 ;
 
-#13. What was the average quantity of products purchased per account in February? 
+#13. What was the average quantity of products purchased per account in March? 
 SELECT SUM(feb.Quantity)/COUNT(cust.acctnum)
-FROM BIT_DB.FebSales feb
+FROM BIT_DB.MarSales mar
 LEFT JOIN BIT_DB.customers cust
 ON feb.orderID=cust.order_id
 WHERE length(orderID)=6
